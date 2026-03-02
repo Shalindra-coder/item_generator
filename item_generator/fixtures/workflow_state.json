@@ -1,7 +1,7 @@
 [
     {
         "doctype": "Workflow State",
-        "name": "Draft",
+        "name": "Send to Ecode",
         "workflow_state_name": "Draft",
         "style": "Info",
         "icon": "edit"
