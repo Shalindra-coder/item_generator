@@ -10,11 +10,11 @@
   "states": [
    {
     "doctype": "Workflow Document State",
-    "state": "Draft",
+    "state": "Send to Ecode",
     "doc_status": "0",
     "allow_edit": "Store User",
     "update_field": "workflow_state",
-    "update_value": "Draft"
+    "update_value": "Send to Ecode"
    },
    {
     "doctype": "Workflow Document State",
@@ -36,7 +36,7 @@
     "doctype": "Workflow Document State",
     "state": "Pending Account Verification",
     "doc_status": "1",
-    "allow_edit": "HO Account User",
+    "allow_edit": "HO Accounts Manager",
     "update_field": "workflow_state",
     "update_value": "Pending Account Verification"
    },
@@ -62,7 +62,7 @@
   "transitions": [
    {
     "doctype": "Workflow Transition",
-    "state": "Draft",
+    "state": "Send to Ecode",
     "action": "Submit",
     "next_state": "Pending Codification",
     "allowed": "Store User",
@@ -106,7 +106,7 @@
     "state": "Pending Account Verification",
     "action": "Approve & Create Items",
     "next_state": "Approved",
-    "allowed": "HO Account User",
+    "allowed": "HO Accounts Manager",
     "allow_self_approval": 1
    },
    {
@@ -114,7 +114,7 @@
     "state": "Pending Account Verification",
     "action": "Reject",
     "next_state": "Rejected",
-    "allowed": "HO Account User",
+    "allowed": "HO Accounts Manager",
     "allow_self_approval": 1
    }
   ]
