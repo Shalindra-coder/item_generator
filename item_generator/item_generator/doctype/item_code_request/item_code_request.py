@@ -19,7 +19,10 @@ class ItemCodeRequest(Document):
 		"""Validate Item Code Request"""
 		# Auto-fill fields if empty
 		self.auto_fill_fields()
-		
+
+		# Similar item / duplicate validation
+		self._validate_no_duplicate_items()
+
 		# Validate each item in the child table
 		for item in self.items:
 			if cint(item.is_asset_item) and not item.asset_category:
@@ -42,6 +45,25 @@ class ItemCodeRequest(Document):
 		# Update summary counts
 		self.update_summary_counts()
 	
+	def _validate_no_duplicate_items(self):
+		"""Prevent duplicate item creation - exact item_name match in existing Items."""
+		for item in self.items:
+			if not item.item_name or not item.item_name.strip():
+				continue
+			item_name = item.item_name.strip()
+			# Check if exact item_name exists (case-insensitive)
+			exact_match = frappe.db.sql(
+				"SELECT name, item_code FROM tabItem WHERE LOWER(TRIM(item_name)) = LOWER(%s) LIMIT 1",
+				(item_name,),
+				as_dict=True,
+			)
+			if exact_match:
+				frappe.throw(
+					frappe._("Item with name '{0}' already exists as {1}. Please use the existing item or choose a different name.").format(
+						item_name, exact_match[0].item_code
+					)
+				)
+
 	def auto_fill_fields(self):
 		"""Auto-fill request details if empty"""
 		# Auto-fill Requested By with current user

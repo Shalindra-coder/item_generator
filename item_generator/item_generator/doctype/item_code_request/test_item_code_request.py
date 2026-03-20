@@ -35,34 +35,52 @@ class TestItemCodeRequest(FrappeTestCase):
 	
 	def test_item_code_request_creation(self):
 		"""Test creating an Item Code Request"""
+		company = frappe.db.get_value("Company", {"name": ("!=", "")}, "name")
+		cost_center = frappe.db.get_value("Cost Center", {"company": company, "is_group": 0}, "name")
+		if not company or not cost_center:
+			self.skipTest("Company or Cost Center not found - skipping")
 		doc = frappe.get_doc({
 			"doctype": "Item Code Request",
-			"item_name": "Test Item",
-			"hsn_code": "1234",
-			"description": "Test Description",
-			"item_group": "Test Item Group",
-			"is_stock_item": 1,
-			"is_asset_item": 0
+			"company": company,
+			"cost_center": cost_center,
+			"items": [
+				{
+					"item_name": "Test Item",
+					"hsn_code": "1234",
+					"description": "Test Description",
+					"item_group": "Test Item Group",
+					"is_stock_item": 1,
+					"is_asset_item": 0,
+				}
+			],
 		})
 		doc.insert()
 		self.assertTrue(doc.name)
-		
 		# Clean up
 		doc.delete()
 	
 	def test_asset_category_validation(self):
 		"""Test that asset_category is required when is_asset_item is checked"""
+		company = frappe.db.get_value("Company", {"name": ("!=", "")}, "name")
+		cost_center = frappe.db.get_value("Cost Center", {"company": company, "is_group": 0}, "name")
+		if not company or not cost_center:
+			self.skipTest("Company or Cost Center not found - skipping")
 		doc = frappe.get_doc({
 			"doctype": "Item Code Request",
-			"item_name": "Test Asset Item",
-			"hsn_code": "1234",
-			"description": "Test Asset Description",
-			"item_group": "Test Item Group",
-			"is_stock_item": 0,
-			"is_asset_item": 1
+			"company": company,
+			"cost_center": cost_center,
+			"items": [
+				{
+					"item_name": "Test Asset Item",
+					"hsn_code": "1234",
+					"description": "Test Asset Description",
+					"item_group": "Test Item Group",
+					"is_stock_item": 0,
+					"is_asset_item": 1,
+				}
+			],
 		})
-		
-		with self.assertRaises(frappe.ValidationError):
+		with self.assertRaises((frappe.ValidationError, frappe.MandatoryError)):
 			doc.insert()
 	
 	def tearDown(self):

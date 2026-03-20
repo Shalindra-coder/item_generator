@@ -36,8 +36,9 @@ app_license = "mit"
 # website_theme_scss = "item_generator/public/scss/website"
 
 # include js, css files in header of web form
-# webform_include_js = {"doctype": "public/js/doctype.js"}
-# webform_include_css = {"doctype": "public/css/doctype.css"}
+# Similar item detection is in item_code_request_form.js (no duplicate)
+# webform_include_js = {"Item Code Request": "public/js/item_generator.js"}
+# webform_include_css = {"Item Code Request": "public/css/item_generator.css"}
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
